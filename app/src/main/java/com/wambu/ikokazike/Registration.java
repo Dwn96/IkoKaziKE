@@ -7,47 +7,37 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputLayout;
 
 public class Registration extends AppCompatActivity {
 
-    private MaterialButton btnRegister, btnLinkToLogin;
-    private TextInputLayout inputName, inputEmail, inputPassword;
+    private EditText editTextName,editTextEmail,editTextPassword;
+    private Button btnRegister;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+        setContentView(R.layout.activity_signup);
 
-        inputName = findViewById(R.id.rTextName);
-        inputEmail = findViewById(R.id.rTextEmail);
-        inputPassword = findViewById(R.id.rTextPassword);
-        btnRegister = findViewById(R.id.btnRegister);
-        btnLinkToLogin = findViewById(R.id.btnLinkToLoginScreen);
-
+        editTextName=findViewById(R.id.editText_signup_name);
+        editTextEmail=findViewById(R.id.editText_signup_email);
+        editTextPassword=findViewById(R.id.editText_signup_password);
+        btnRegister=findViewById(R.id.signupBtn);
 
 
-btnRegister.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
 
-    }
-});
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-btnLinkToLogin.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        Intent toLogin= new Intent(Registration.this,LoginActivity.class);
-        startActivity(toLogin);
+            }
+        });
+
 
 
 
     }
-});
 
-    }
 }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "578273378208",
+    "firebase_url": "https://kazikwote.firebaseio.com",
+    "project_id": "kazikwote",
+    "storage_bucket": "kazikwote.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578273378208:android:abd1027851c44722ef2ec5",
+        "android_client_info": {
+          "package_name": "com.wambu.ikokazike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578273378208-vib5ipgq26t6cj7q2bto5gq2l2et7hma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wambu.ikokazike",
+            "certificate_hash": "834321330006bffbba8b423a300d781f116df683"
+          }
+        },
+        {
+          "client_id": "578273378208-thi7igengtrd663psgf8hv1m3q0cg1j6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ0x1jsZvoa4MbG2EgDID1sjv67oSv2aw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578273378208-thi7igengtrd663psgf8hv1m3q0cg1j6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
