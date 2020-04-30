@@ -31,6 +31,7 @@
             android:layout_marginTop="40dp"
             android:layout_height="40dp"
             android:hint="Password"
+            android:inputType="textPassword"
             android:textColorHint="@color/hint_color"
 
             android:layout_marginBottom="20dp"/>
@@ -46,13 +47,39 @@
             />
 
         <TextView
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:text="Forgot password?"
+            android:id="@+id/forgotPasswordtxt"
+            android:layout_gravity="center"
+            android:textColor="#1172E7"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
             android:text="Don't have an account?Sign up"
             android:id="@+id/signupTxt"
             android:layout_gravity="center"
             android:textColor="#1172E7"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:text="OR"
+            android:layout_gravity="center"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:text="Request One Time Password"
+            android:id="@+id/OtpTextView"
+            android:layout_gravity="center"
+            android:textColor="#1172E7"/>
 
 
 
