@@ -1,12 +1,16 @@
 package com.wambu.ikokazike;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,14 +23,25 @@ public class GridViewImageTextActivity extends Activity {
 
     int[] gridViewImageId = {R.drawable.brush, R.drawable.pipe, R.drawable.electricity, R.drawable.hand, R.drawable.welder, R.drawable.plus};
 
+    Toolbar toolbarHome;
+
+    SharedPreferences sharedPreferences;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gridview_image_text_example);
 
+
+        sharedPreferences = getSharedPreferences("KAZIKWOTEDATA", Context.MODE_PRIVATE);
+
         CustomGridViewActivity adapterViewAndroid = new CustomGridViewActivity(GridViewImageTextActivity.this, gridViewString, gridViewImageId);
         androidGridView=findViewById(R.id.grid_view_image_text);
         androidGridView.setAdapter(adapterViewAndroid);
+
+        toolbarHome= findViewById(R.id.toolbarHome);
+        toolbarHome.setTitle("KaziKwote");
+        toolbarHome.setTitleTextColor(Color.BLACK);
+
 
         androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -55,10 +70,29 @@ public class GridViewImageTextActivity extends Activity {
 
                     case 5:
 
-                        Toast.makeText(getApplicationContext(),"You need to be Logged In to do that",Toast.LENGTH_SHORT).show();
-                        Intent toLogin = new Intent(getApplicationContext(),LoginActivity.class);
-                        startActivity(toLogin);
-                        break;
+                        /*
+                        * So basically here we check if the user login in was successful (in LoginActivity)
+                        * if true we jump directly  to AddService else, we go to Login
+                        * My keyboards fucked so typing b's is a pain lmao
+                        *
+                        *
+                        * */
+
+
+                        if(sharedPreferences.getBoolean("LOGINSTATUS",false)){
+                            Intent toAddService = new Intent(getApplicationContext(),AddService.class);
+                            startActivity(toAddService);
+                            break;
+
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"You need to be Logged In to do that",Toast.LENGTH_SHORT).show();
+                            Intent toLogin = new Intent(getApplicationContext(),LoginActivity.class);
+                            startActivity(toLogin);
+                        }
+
+
+
 
 
                 }
