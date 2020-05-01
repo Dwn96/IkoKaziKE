@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddService"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
 
     <Toolbar
@@ -22,7 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center_horizontal"
+        android:padding="16dp">
 
 
         <EditText
@@ -42,7 +44,7 @@
             android:id="@+id/editText_addService_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="40dp"
             android:gravity="center"
             android:hint="Phone number"
             android:textColor="@color/black"
@@ -52,7 +54,27 @@
 
             />
 
-        <Spinner
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_text_Location"
+            android:hint="Enter address"
+            android:drawableLeft="@drawable/ic_location"
+            android:layout_marginTop="40dp"
+            />
+
+
+
+
+
+
+
+
+
+
+        <com.jaiselrahman.hintspinner.HintSpinner
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/spinner_addCategory"
@@ -80,14 +102,15 @@
             android:layout_height="50dp"
             android:id="@+id/spinner_addRate"
             android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
             />
 
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/spinner_addRegion"
-            android:layout_marginTop="40dp"
-            />
+
+
+
+
+
+
 
         <Button
 

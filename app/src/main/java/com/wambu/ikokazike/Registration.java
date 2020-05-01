@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +29,8 @@ public class Registration extends AppCompatActivity {
     private EditText editTextName,editTextEmail,editTextPassword;
     private Button btnRegister;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
 
     FirebaseAuth firebaseAuth;
@@ -37,6 +41,10 @@ public class Registration extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        sharedPreferences = getSharedPreferences("KAZIKWOTEDATA", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseUsers = FirebaseDatabase.getInstance().getReference("USERS");
@@ -78,7 +86,7 @@ public class Registration extends AppCompatActivity {
                             progressDialog.show();
 
                             String phone = getIntent().getExtras().getString("MOBILE");
-                            String uid = getIntent().getExtras().getString("UID");
+                            final String uid = getIntent().getExtras().getString("UID");
 
                             UserInfo userInfo = new UserInfo(name,email,phone);
 
@@ -88,6 +96,10 @@ public class Registration extends AppCompatActivity {
                                     progressDialog.dismiss();
 
                                     if(task.isSuccessful()){
+
+                                        editor.putString("UID",uid); //change this to .commit() if ran into issues
+                                        editor.apply();
+
                                         Toast.makeText(getApplicationContext(),"Successful registration",Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
@@ -158,7 +170,7 @@ public class Registration extends AppCompatActivity {
 
                         //save user info to database
                         FirebaseUser currentUser  = firebaseAuth.getCurrentUser();
-                        String uid = currentUser.getUid();
+                        final String uid = currentUser.getUid();
 
                         UserInfo userInfo = new UserInfo(name,email,"");
 
@@ -167,6 +179,9 @@ public class Registration extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 progressDialog.dismiss();
                                 if(task.isSuccessful()){
+
+                                    editor.putString("UID",uid);
+                                    editor.apply();  //change this to .commit() if ran into issues
                                     Toast.makeText(getApplicationContext(),"Successful registration",Toast.LENGTH_SHORT).show();
                                     finish();
                                 }

@@ -12,4 +12,9 @@
     <string name="change_password">Change Password</string>
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
+    <string name="api_key">AIzaSyDfod9sngt3b0l5KAFd50GB0MnN8xZja6Y</string>
+    <string name="enter_location">Enter Location</string>
+    <string name="auto_complete_text">Autocomplete textview with custom adapter.</string>
+    <string name="error">Google Api key is missing.</string>
+
 </resources>
