@@ -98,7 +98,7 @@ public class Registration extends AppCompatActivity {
                                     if(task.isSuccessful()){
 
                                         editor.putString("UID",uid); //change this to .commit() if ran into issues
-                                        editor.apply();
+                                       // editor.commit();
 
                                         Toast.makeText(getApplicationContext(),"Successful registration",Toast.LENGTH_SHORT).show();
                                         finish();
@@ -181,7 +181,7 @@ public class Registration extends AppCompatActivity {
                                 if(task.isSuccessful()){
 
                                     editor.putString("UID",uid);
-                                    editor.apply();  //change this to .commit() if ran into issues
+                                    editor.commit();  //change this to .commit() if ran into issues
                                     Toast.makeText(getApplicationContext(),"Successful registration",Toast.LENGTH_SHORT).show();
                                     finish();
                                 }

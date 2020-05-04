@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 public class UserService implements Serializable {
 
-    String serviceName="",servicePhone="",serviceCategory="",serviceDescription="",serviceRate="",serviceRegion="",dateAdded="";
+    String serviceName="",servicePhone="",serviceCategory="",serviceDescription="",serviceRate="",serviceRegion="",dateAdded="",serviceId="";
 
 
-    public UserService(String serviceName, String servicePhone, String serviceCategory, String serviceDescription, String serviceRate, String serviceRegion, String dateAdded) {
+    public UserService(String serviceName, String servicePhone, String serviceCategory, String serviceDescription, String serviceRate, String serviceRegion, String dateAdded, String serviceId) {
         this.serviceName = serviceName;
         this.servicePhone = servicePhone;
         this.serviceCategory = serviceCategory;
@@ -15,6 +15,7 @@ public class UserService implements Serializable {
         this.serviceRate = serviceRate;
         this.serviceRegion = serviceRegion;
         this.dateAdded = dateAdded;
+        this.serviceId=serviceId;
     }
 
     public String getServiceName() {
@@ -74,11 +75,11 @@ public class UserService implements Serializable {
     }
 
 
-    public UserService(String serviceName, String servicePhone, String serviceDescription, String dateAdded, String serviceRegion) {
-        this.serviceName = serviceName;
-        this.servicePhone = servicePhone;
-        this.serviceDescription = serviceDescription;
-        this.dateAdded = dateAdded;
-        this.serviceRegion=serviceRegion;
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 }

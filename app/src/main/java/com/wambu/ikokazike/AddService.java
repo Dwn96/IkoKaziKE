@@ -33,6 +33,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jaiselrahman.hintspinner.HintSpinner;
@@ -63,6 +64,9 @@ public class AddService extends Activity {
     TextView tvLocation,tvLocation2;
 
 
+    FirebaseAuth firebaseAuth;
+
+
     DatabaseReference databaseServices;
 
     @Override
@@ -73,6 +77,8 @@ public class AddService extends Activity {
 
         addLocation = findViewById(R.id.edit_text_Location);
 
+
+        firebaseAuth= FirebaseAuth.getInstance();
 
         //Initialize Places
         Places.initialize(getApplicationContext(),"AIzaSyDfod9sngt3b0l5KAFd50GB0MnN8xZja6Y");
@@ -137,8 +143,8 @@ public class AddService extends Activity {
 
         //Initialize spinner data array
 
-        String[] services = new String[]{"Painter", "Plumber", "Electrician", "Handsman", "Welder" };
-        String [] rates = new String[]{"Below 5000","Ksh 5000-10000","Ksh 10000-15000","Ksh 15000-20000","Ksh 20000-30000","Above 30000"};
+        String[] services = new String[]{"Painter", "Plumber", "Electrician", "Handsman", "Welder","" };
+        String [] rates = new String[]{"Below 5000","Ksh 5000-10000","Ksh 10000-15000","Ksh 15000-20000","Ksh 20000-30000","Above 30000",""};
 
        addCategory.setAdapter(new HintSpinnerAdapter<>(this,services,"Select Category"));
        addRate.setAdapter(new HintSpinnerAdapter<>(this,rates,"Select your rate"));
@@ -146,9 +152,10 @@ public class AddService extends Activity {
 
 
 
+        String userId= firebaseAuth.getCurrentUser().getUid();
 
 
-        String userId = sharedPreferences.getString("UID","");
+        //String userId = sharedPreferences.getString("UID","");
         databaseServices = FirebaseDatabase.getInstance().getReference("SERVICE").child(userId);
 
 
@@ -179,6 +186,8 @@ public class AddService extends Activity {
 
 
 
+
+
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
                 Calendar calendar = Calendar.getInstance();
                 String todaysDate = simpleDateFormat.format(calendar.getTime());
@@ -189,10 +198,12 @@ public class AddService extends Activity {
 
                         if(!description.isEmpty()){
 
+
+
                             progressDialog.show();
 
                             String key = databaseServices.push().getKey();
-                            UserService userService = new UserService(name,phone,category,description,rate,selectedRegion,todaysDate);
+                            UserService userService = new UserService(name,phone,category,description,rate,selectedRegion,todaysDate,key);
 
                             databaseServices.child(key).setValue(userService).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

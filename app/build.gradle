@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.wambu.ikokazike"
@@ -17,6 +19,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    viewBinding {
+        enabled = true
+    }
+
+
 }
 
 dependencies {
@@ -29,8 +37,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.google.firebase:firebase-database:19.3.0'
-    implementation 'com.jakewharton:butterknife:10.2.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.android.support:design:28.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha03'
     implementation 'androidx.cardview:cardview:1.0.0'
