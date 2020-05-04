@@ -41,6 +41,15 @@ public class GridViewImageTextActivity extends Activity {
         toolbarHome= findViewById(R.id.toolbarHome);
         toolbarHome.setTitle("KaziKwote");
         toolbarHome.setTitleTextColor(Color.BLACK);
+        toolbarHome.setNavigationIcon(R.drawable.ic_account);
+
+        toolbarHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toMyListing = new Intent(getApplicationContext(),PainterActivity.class);
+                startActivity(toMyListing);
+            }
+        }); 
 
 
         androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -50,6 +59,9 @@ public class GridViewImageTextActivity extends Activity {
                 switch (position){
                     case 0:
                         Toast.makeText(getApplicationContext(),"Showing you painters in your area...",Toast.LENGTH_SHORT).show();
+                        Intent tempIntent  = new Intent(getApplicationContext(),PainterActivity.class);
+                        startActivity(tempIntent);
+
                         break;
 
                     case 1:

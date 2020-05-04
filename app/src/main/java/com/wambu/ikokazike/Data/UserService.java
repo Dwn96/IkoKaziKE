@@ -18,6 +18,11 @@ public class UserService implements Serializable {
         this.serviceId=serviceId;
     }
 
+    public UserService(){
+        
+    }
+
+
     public String getServiceName() {
         return serviceName;
     }
