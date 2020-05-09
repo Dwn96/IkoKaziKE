@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:minHeight="500dp"
+    android:minWidth="300dp"
+      >
+
+
+
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbarUpdateService"
+        android:background="#ECB511"
+        android:padding="0dp"
+
+
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp"
+
+        >
+
+
+        <EditText
+                android:id="@+id/editText_update_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:hint="Name"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color"
+                android:textSize="15sp"
+
+                />
+
+            <EditText
+                android:id="@+id/editText_update_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:hint="Phone number"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color"
+                android:textSize="15sp"
+
+
+                />
+
+        <EditText
+            android:id="@+id/edit_text_update_Location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:drawableLeft="@drawable/ic_location"
+            android:hint="Enter address" />
+
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/spinner_updateCategory"
+            android:layout_marginTop="40dp"
+            />
+
+
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/spinner_updateRate"
+            android:layout_marginTop="40dp"
+            />
+
+
+
+
+
+
+
+        <EditText
+                android:id="@+id/editText_update_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:hint="Description"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color"
+                android:textSize="15sp"
+
+                />
+
+
+
+
+
+
+
+
+
+        <Button
+
+                android:id="@+id/button_update_Service"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Save Changes"
+                android:layout_marginTop="40dp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

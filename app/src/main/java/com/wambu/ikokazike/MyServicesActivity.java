@@ -1,7 +1,6 @@
 package com.wambu.ikokazike;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,20 +10,30 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jaiselrahman.hintspinner.HintSpinnerAdapter;
 import com.wambu.ikokazike.Data.UserService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class PainterActivity extends Activity {
+public class MyServicesActivity extends Activity implements UpdateInterface {
 
 
     ArrayList<UserService> allServiceList = new ArrayList<>();
@@ -45,7 +54,7 @@ public class PainterActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_painter);
+        setContentView(R.layout.activity_myservices);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -86,6 +95,13 @@ public class PainterActivity extends Activity {
 
 
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ReadAllNotes();
     }
 
     public void ReadAllNotes(){
@@ -105,7 +121,7 @@ public class PainterActivity extends Activity {
                     allServiceList.add(userService);
                 }
                 progressDialog.dismiss();
-               ServiceAdapter  serviceAdapter = new ServiceAdapter(PainterActivity.this,allServiceList);
+               ServiceAdapter  serviceAdapter = new ServiceAdapter(MyServicesActivity.this,allServiceList);
                recyclerViewServices.setAdapter(serviceAdapter);
 
             }
@@ -117,5 +133,113 @@ public class PainterActivity extends Activity {
         });
 
     }
+
+    @Override
+    public void updateUserService(UserService userService) {
+
+        databaseServices.child(userService.getServiceId()).setValue(userService).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+
+                    Toast.makeText(getApplicationContext(),"Changes successfully saved",Toast.LENGTH_SHORT).show();
+                    ReadAllNotes();
+
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Changes could not be saved",Toast.LENGTH_SHORT).show();
+
+
+                }
+
+            }
+        });
+
+    }
+
+
+
+
+
+    @Override
+    public void populateSpinner(Spinner spinner,String string, int a) {
+
+        List<String> rates = new ArrayList<String>();
+        rates.add("Below 5000");
+        rates.add("Ksh 5000-10000");
+        rates.add("Ksh 10000-15000");
+        rates.add("Ksh 15000-20000");
+        rates.add("Ksh 20000-30000");
+        rates.add("Above 30000");
+        rates.add("[Update your rate]");
+
+
+        List<String> services = new ArrayList<String>();
+        services.add("Painter");
+        services.add("Plumber");
+        services.add("Electrician");
+        services.add("Handsman");
+        services.add("Welder");
+        services.add("[Update your job category]");
+
+
+        
+
+
+
+
+
+       // String [] rateArray = new String[]{"Below 5000","Ksh 5000-10000","Ksh 10000-15000","Ksh 15000-20000","Ksh 20000-30000","Above 30000","Update your rate"};
+        //String[] serviceArray = new String[]{"Painter", "Plumber", "Electrician", "Handsman", "Welder","" };
+
+
+       List<String> dataSet = new ArrayList<String>();
+
+        if (a == 1 ){
+            dataSet.addAll(rates);
+
+        }
+        else if(a == 2){
+            dataSet.addAll(services);
+
+        }
+
+
+        final int listSize = dataSet.size() - 1;
+
+        
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, dataSet){
+            @Override
+            public int getCount() {
+                return listSize; //Truncate list
+            }
+        };
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+
+        //int selectedPosition = dataAdapter.getPosition(string);
+        spinner.setSelection(listSize);
+
+
+        //spinner.setSelection(Arrays.asList(servicesArray).indexOf(string)); // Hidden item to appear in the spinner
+
+
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+
 
 }

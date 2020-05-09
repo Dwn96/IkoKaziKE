@@ -12,8 +12,6 @@ import android.widget.GridView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 
 public class GridViewImageTextActivity extends Activity {
 
@@ -46,10 +44,10 @@ public class GridViewImageTextActivity extends Activity {
         toolbarHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent toMyListing = new Intent(getApplicationContext(),PainterActivity.class);
+                Intent toMyListing = new Intent(getApplicationContext(), MyServicesActivity.class);
                 startActivity(toMyListing);
             }
-        }); 
+        });
 
 
         androidGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,7 +57,7 @@ public class GridViewImageTextActivity extends Activity {
                 switch (position){
                     case 0:
                         Toast.makeText(getApplicationContext(),"Showing you painters in your area...",Toast.LENGTH_SHORT).show();
-                        Intent tempIntent  = new Intent(getApplicationContext(),PainterActivity.class);
+                        Intent tempIntent  = new Intent(getApplicationContext(), MyServicesActivity.class);
                         startActivity(tempIntent);
 
                         break;

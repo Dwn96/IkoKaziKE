@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PainterActivity"></activity>
+        <activity android:name=".MyServicesActivity"></activity>
         <activity android:name=".AutoCompleteActivity" />
         <activity android:name=".AddService" />
         <activity android:name=".OTPActivity" />

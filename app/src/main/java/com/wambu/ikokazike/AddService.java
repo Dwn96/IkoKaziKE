@@ -85,6 +85,7 @@ public class AddService extends Activity {
 
         //Set editText non focusable
         addLocation.setFocusable(false);
+
         addLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,9 +94,7 @@ public class AddService extends Activity {
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,Place.Field.LAT_LNG,
                         Place.Field.NAME);
 
-                //Set filter
 
-                //TypeFilter typeFilter = new
 
 
                 //Create intent
@@ -105,6 +104,7 @@ public class AddService extends Activity {
 
                 //Start activity result
                 startActivityForResult(intent,100);
+
             }
         });
 
@@ -264,6 +264,7 @@ public class AddService extends Activity {
             //INITIALIZE PLACE
 
 
+            assert data != null;
             Place place = Autocomplete.getPlaceFromIntent(data);
 
             //Set address on Editext
@@ -273,6 +274,7 @@ public class AddService extends Activity {
         }
         else if(resultCode == AutocompleteActivity.RESULT_ERROR){
 
+            assert data != null;
             Status status = Autocomplete.getStatusFromIntent(data);
 
             Toast.makeText(getApplicationContext(),status.getStatusMessage(),Toast.LENGTH_SHORT).show();

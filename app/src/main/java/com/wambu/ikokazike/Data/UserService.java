@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 public class UserService implements Serializable {
 
-    String serviceName="",servicePhone="",serviceCategory="",serviceDescription="",serviceRate="",serviceRegion="",dateAdded="",serviceId="";
+    String serviceName = "", servicePhone = "", serviceCategory = "", serviceDescription = "", serviceRate = "", serviceRegion = "", dateAdded = "", serviceId = "";
+    enum serviceCategory {Painter, Plumber, Electrician, Handsman, Welder}
 
 
     public UserService(String serviceName, String servicePhone, String serviceCategory, String serviceDescription, String serviceRate, String serviceRegion, String dateAdded, String serviceId) {
@@ -15,13 +16,12 @@ public class UserService implements Serializable {
         this.serviceRate = serviceRate;
         this.serviceRegion = serviceRegion;
         this.dateAdded = dateAdded;
-        this.serviceId=serviceId;
+        this.serviceId = serviceId;
     }
 
-    public UserService(){
-        
-    }
+    public UserService() {
 
+    }
 
     public String getServiceName() {
         return serviceName;
@@ -79,7 +79,6 @@ public class UserService implements Serializable {
         this.dateAdded = dateAdded;
     }
 
-
     public String getServiceId() {
         return serviceId;
     }
@@ -88,3 +87,4 @@ public class UserService implements Serializable {
         this.serviceId = serviceId;
     }
 }
+
