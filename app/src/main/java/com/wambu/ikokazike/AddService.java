@@ -51,7 +51,7 @@ import java.util.List;
 
 
 
-public class AddService extends Activity {
+public class AddService extends Activity  implements SpinnerPopulater {
 
     EditText addName,addPhone,addDescription, addLocation;
     Spinner  addCategory,addRate,addRegion;
@@ -143,11 +143,21 @@ public class AddService extends Activity {
 
         //Initialize spinner data array
 
+        /*
         String[] services = new String[]{"Painter", "Plumber", "Electrician", "Handsman", "Welder","" };
         String [] rates = new String[]{"Below 5000","Ksh 5000-10000","Ksh 10000-15000","Ksh 15000-20000","Ksh 20000-30000","Above 30000",""};
 
        addCategory.setAdapter(new HintSpinnerAdapter<>(this,services,"Select Category"));
        addRate.setAdapter(new HintSpinnerAdapter<>(this,rates,"Select your rate"));
+
+
+         */
+
+        populateSpinner(addRate,1);
+         populateSpinner(addCategory,2);
+
+
+
 
 
 
@@ -280,5 +290,57 @@ public class AddService extends Activity {
             Toast.makeText(getApplicationContext(),status.getStatusMessage(),Toast.LENGTH_SHORT).show();
 
         }
+    }
+
+    @Override
+    public void populateSpinner(Spinner spinner, int a) {
+
+        List<String> rates = new ArrayList<String>();
+        rates.add("Below 5000");
+        rates.add("Ksh 5000-10000");
+        rates.add("Ksh 10000-15000");
+        rates.add("Ksh 15000-20000");
+        rates.add("Ksh 20000-30000");
+        rates.add("Above 30000");
+        rates.add("[Select your rate]");
+
+
+        List<String> services = new ArrayList<String>();
+        services.add("Painter");
+        services.add("Plumber");
+        services.add("Electrician");
+        services.add("Handsman");
+        services.add("Welder");
+        services.add("[Select your job category]");
+
+
+
+        List<String> dataSet = new ArrayList<String>();
+
+        if (a == 1 ){
+            dataSet.addAll(rates);
+
+        }
+        else if(a == 2){
+            dataSet.addAll(services);
+
+        }
+
+
+        final int listSize = dataSet.size() - 1;
+
+
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, dataSet){
+            @Override
+            public int getCount() {
+                return listSize; //Truncate list
+            }
+        };
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+        spinner.setSelection(listSize);
+
     }
 }

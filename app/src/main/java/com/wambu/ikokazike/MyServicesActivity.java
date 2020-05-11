@@ -113,6 +113,8 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                allServiceList.clear();  //delete if fail occurs
+
                 progressDialog.dismiss();
 
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){ //dataSnapshot will return all our data, so this is how we can get a single entry
@@ -157,12 +159,28 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
 
     }
 
+    @Override
+    public void deleteUserService(UserService userService) {
 
+        databaseServices.child(userService.getServiceId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
 
+                if (task.isSuccessful()){
+
+                    Toast.makeText(getApplicationContext(),"Listing Deleted",Toast.LENGTH_SHORT).show();
+                    ReadAllNotes();
+
+                }
+
+            }
+        });
+
+    }
 
 
     @Override
-    public void populateSpinner(Spinner spinner,String string, int a) {
+    public void populateSpinner(Spinner spinner,  int a) {
 
         List<String> rates = new ArrayList<String>();
         rates.add("Below 5000");
@@ -220,7 +238,7 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
         spinner.setAdapter(dataAdapter);
 
         //int selectedPosition = dataAdapter.getPosition(string);
-        spinner.setSelection(listSize);
+        //spinner.setSelection(listSize); remove to revert
 
 
         //spinner.setSelection(Arrays.asList(servicesArray).indexOf(string)); // Hidden item to appear in the spinner
@@ -236,10 +254,22 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
 
         }
 
+    @Override
+    public void updateRateSpinnerPosition(Spinner spinner, String string) {
 
+        String [] rateArray = new String[]{"Below 5000","Ksh 5000-10000","Ksh 10000-15000","Ksh 15000-20000","Ksh 20000-30000","Above 30000"};
 
+        spinner.setSelection(Arrays.asList(rateArray).indexOf(string));
+    }
 
+    @Override
+    public void updateCategorySpinnerPosition(Spinner spinner, String string) {
 
+        String[] serviceArray = new String[]{"Painter", "Plumber", "Electrician", "Handsman", "Welder" };
+
+        spinner.setSelection(Arrays.asList(serviceArray).indexOf(string));
+
+    }
 
 
 }

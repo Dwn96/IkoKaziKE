@@ -74,7 +74,7 @@
 
 
 
-        <com.jaiselrahman.hintspinner.HintSpinner
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/spinner_addCategory"
