@@ -61,8 +61,8 @@
         <ImageView
             android:id="@+id/image_row_edit"
             android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_edit"/>
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_edit" />
 
         <ImageView
             android:id="@+id/image_row_delete"

@@ -11,7 +11,7 @@
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbarMyListings"
+        android:id="@+id/toolbarPainters"
         android:background="#ECB511"
 
 
@@ -22,10 +22,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycler_myServices">
-
-
-
+        android:id="@+id/recycler_Painters">
 
     </androidx.recyclerview.widget.RecyclerView>
 

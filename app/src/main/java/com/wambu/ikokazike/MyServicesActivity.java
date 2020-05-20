@@ -80,7 +80,7 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
 
         databaseServices = FirebaseDatabase.getInstance().getReference("SERVICE").child(userId);
 
-        recyclerViewServices= findViewById(R.id.recycler_allPainters);
+        recyclerViewServices= findViewById(R.id.recycler_myServices);
 
 
         linearLayoutManager = new LinearLayoutManager(this);

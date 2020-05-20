@@ -5,15 +5,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import androidx.core.app.ActivityCompat;
 
-public class GridViewImageTextActivity extends Activity {
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
+
+public class GridViewImageTextActivity extends Activity   {
 
     GridView androidGridView;
 
@@ -23,11 +41,57 @@ public class GridViewImageTextActivity extends Activity {
 
     Toolbar toolbarHome;
 
-    SharedPreferences sharedPreferences;
+   SharedPreferences sharedPreferences;
+  //  SharedPreferences pref =  getApplicationContext().getSharedPreferences("LocationData",0);
+ //   SharedPreferences.Editor editor;
+
+
+
+   // SimpleLocation location;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gridview_image_text_example);
+
+
+        requestPermission();
+
+
+        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);  //change back to private variable in exception occurs
+
+            client.getLastLocation().addOnSuccessListener(GridViewImageTextActivity.this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    if(location != null){
+
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+
+                        Log.d("Latitude",String.valueOf(latitude));
+                        Log.d("Longitude",String.valueOf(longitude));
+
+
+
+                    }
+
+                }
+            });
+
+
+
+
+
+
+       // final String
+
+     //   pref =  getApplicationContext().getSharedPreferences("LocationData",0);
+     //   editor= pref.edit();
+
+    //    editor.putString("START_LONGITUDE",startLongitude.);
+
+
+
 
 
         sharedPreferences = getSharedPreferences("KAZIKWOTEDATA", Context.MODE_PRIVATE);
@@ -57,8 +121,8 @@ public class GridViewImageTextActivity extends Activity {
                 switch (position){
                     case 0:
                         Toast.makeText(getApplicationContext(),"Showing you painters in your area...",Toast.LENGTH_SHORT).show();
-                        Intent tempIntent  = new Intent(getApplicationContext(), MyServicesActivity.class);
-                        startActivity(tempIntent);
+                        Intent toPainterIntent  = new Intent(getApplicationContext(), PainterActivity.class);
+                        startActivity(toPainterIntent);
 
                         break;
 
@@ -111,7 +175,21 @@ public class GridViewImageTextActivity extends Activity {
         });
 
 
+
+
+
+
+
+
     }
+
+
+    private void requestPermission(){
+
+        ActivityCompat.requestPermissions(this, new String[] {ACCESS_FINE_LOCATION},1);
+    }
+
+
 
 
 }

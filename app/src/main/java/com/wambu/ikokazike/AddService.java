@@ -281,6 +281,8 @@ public class AddService extends Activity  implements SpinnerPopulater {
 
             addLocation.setText(place.getAddress());
 
+
+
         }
         else if(resultCode == AutocompleteActivity.RESULT_ERROR){
 
