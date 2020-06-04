@@ -166,7 +166,7 @@ public class AddService extends Activity  implements SpinnerPopulater {
 
 
         //String userId = sharedPreferences.getString("UID","");
-        databaseServices = FirebaseDatabase.getInstance().getReference("SERVICE").child(userId);
+        databaseServices = FirebaseDatabase.getInstance().getReference("SERVICE"); //used to be .child(userId);
 
 
         toolbarAddService.setTitle("Add A Service");
@@ -192,7 +192,7 @@ public class AddService extends Activity  implements SpinnerPopulater {
                 String rate = addRate.getSelectedItem().toString();
                 String selectedRegion= addLocation.getText().toString();
 
-
+                String userId= firebaseAuth.getCurrentUser().getUid();
 
 
 
@@ -213,7 +213,7 @@ public class AddService extends Activity  implements SpinnerPopulater {
                             progressDialog.show();
 
                             String key = databaseServices.push().getKey();
-                            UserService userService = new UserService(name,phone,category,description,rate,selectedRegion,todaysDate,key);
+                            UserService userService = new UserService(name,phone,category,description,rate,selectedRegion,todaysDate,key,userId);
 
                             databaseServices.child(key).setValue(userService).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

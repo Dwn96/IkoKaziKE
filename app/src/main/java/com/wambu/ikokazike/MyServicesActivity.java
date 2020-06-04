@@ -25,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jaiselrahman.hintspinner.HintSpinnerAdapter;
 import com.wambu.ikokazike.Data.UserService;
@@ -48,7 +49,7 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
     RecyclerView recyclerViewServices;
     Toolbar toolbarMyListings;
 
-
+    Query query;
 
 
     @Override
@@ -78,7 +79,9 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
 
         String userId= firebaseAuth.getCurrentUser().getUid();
 
-        databaseServices = FirebaseDatabase.getInstance().getReference("SERVICE").child(userId);
+        databaseServices = FirebaseDatabase.getInstance().getReference("SERVICE");   //used to be .child(userId);
+
+        query = databaseServices.orderByChild("posterId").equalTo(userId);
 
         recyclerViewServices= findViewById(R.id.recycler_myServices);
 
@@ -108,8 +111,9 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
 
         allServiceList.clear();
         progressDialog.show();
+        final String userId= firebaseAuth.getCurrentUser().getUid();
 
-        databaseServices.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -123,7 +127,7 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
                     allServiceList.add(userService);
                 }
                 progressDialog.dismiss();
-               ServiceAdapter  serviceAdapter = new ServiceAdapter(MyServicesActivity.this,allServiceList);
+               ServiceAdapter  serviceAdapter = new ServiceAdapter(MyServicesActivity.this,allServiceList,userId);
                recyclerViewServices.setAdapter(serviceAdapter);
 
             }
@@ -137,9 +141,42 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
     }
 
     @Override
-    public void updateUserService(UserService userService) {
+    public void updateUserService(final UserService userService) {
 
-        databaseServices.child(userService.getServiceId()).setValue(userService).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                query.getRef().setValue(userService).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if (task.isSuccessful()){
+
+                            Toast.makeText(getApplicationContext(),"Changes successfully saved",Toast.LENGTH_SHORT).show();
+                            ReadAllNotes();
+
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"Changes could not be saved",Toast.LENGTH_SHORT).show();
+
+
+                        }
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        /*
+
+        databaseServices.child().setValue(userService).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
@@ -157,12 +194,41 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
             }
         });
 
+         */
+
     }
 
     @Override
     public void deleteUserService(UserService userService) {
 
-        databaseServices.child(userService.getServiceId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                query.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if (task.isSuccessful()){
+
+                            Toast.makeText(getApplicationContext(),"Listing Deleted",Toast.LENGTH_SHORT).show();
+                            ReadAllNotes();
+
+                        }
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Database Error", "onCancelled", databaseError.toException());
+            }
+        });
+
+
+/*
+       query.addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
@@ -175,6 +241,8 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
 
             }
         });
+
+       */
 
     }
 
@@ -225,7 +293,7 @@ public class MyServicesActivity extends Activity implements UpdateInterface {
 
         final int listSize = dataSet.size() - 1;
 
-        
+
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, dataSet){
             @Override

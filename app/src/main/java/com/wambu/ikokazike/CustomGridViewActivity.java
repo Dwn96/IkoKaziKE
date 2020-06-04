@@ -14,7 +14,7 @@ public class CustomGridViewActivity extends BaseAdapter {
     private final int[] gridViewImageID;
 
 
-    CustomGridViewActivity(Context context, String gridviewString[], int gridViewImageID[]){
+    CustomGridViewActivity(Context context, String[] gridviewString, int[] gridViewImageID){
         mContext=context;
         this.gridviewString=gridviewString;
         this.gridViewImageID=gridViewImageID;
@@ -48,12 +48,12 @@ public class CustomGridViewActivity extends BaseAdapter {
 
             gridViewAndroid = new View (mContext);
             gridViewAndroid = inflater.inflate(R.layout.gridview_layout, null);
-            TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
-            ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.android_gridview_image);
+            TextView textViewAndroid = gridViewAndroid.findViewById(R.id.android_gridview_text);
+            ImageView imageViewAndroid = gridViewAndroid.findViewById(R.id.android_gridview_image);
             textViewAndroid.setText(gridviewString[i]);
             imageViewAndroid.setImageResource(gridViewImageID[i]);
         } else {
-            gridViewAndroid = (View) convertView;
+            gridViewAndroid = convertView;
         }
 
         return gridViewAndroid;

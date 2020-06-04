@@ -7,16 +7,21 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -54,7 +59,7 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
     Location mLocation;
 
     Geocoder coder;
-   // double longitude,latitude;
+    // double longitude,latitude;
 
     FusedLocationProviderClient client;
 
@@ -95,8 +100,8 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
 
  */
 
-
-        client.getLastLocation().addOnSuccessListener(PainterActivity.this, new OnSuccessListener<Location>() {
+/*
+        client.getLastLocation().addOnSuccessListener(PainterActivity.this, new OnSuccessListener<Location>() {   //this is what i commented out last, revert if crash
             @Override
             public void onSuccess(Location location) {
 
@@ -120,7 +125,7 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
         });
 
 
-
+*/
 
 /*
         location= new SimpleLocation(this);
@@ -138,22 +143,14 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
  */
 
 
+        firebaseAuth = FirebaseAuth.getInstance();
 
+        toolbarPainters = findViewById(R.id.toolbarPainters);
+        toolbarPainters.setTitle("Painters");
+        toolbarPainters.setTitleTextColor(Color.BLACK);
+        toolbarPainters.setNavigationIcon(R.drawable.ic_arrow_back);
 
-
-
-
-
-
-
-      firebaseAuth=FirebaseAuth.getInstance();
-
-         toolbarPainters= findViewById(R.id.toolbarPainters);
-         toolbarPainters.setTitle("Painters");
-         toolbarPainters.setTitleTextColor(Color.BLACK);
-         toolbarPainters.setNavigationIcon(R.drawable.ic_arrow_back);
-
-         toolbarPainters.setOnClickListener(new View.OnClickListener() {
+        toolbarPainters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -163,17 +160,18 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Working");
 
-        String userId= Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        //String userId= Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
+        String userId = firebaseAuth.getCurrentUser().getUid();
 
 
         //databasePainters = FirebaseDatabase.getInstance().getReference("SERVICE");
 
-        databasePainters = FirebaseDatabase.getInstance().getReference("SERVICE").child(userId);
-       // query = databasePainters.orderByChild("serviceCategory").equalTo("Painter");
+        databasePainters = FirebaseDatabase.getInstance().getReference("SERVICE");  //used to be .child(userID)
+        query = databasePainters.orderByChild("serviceCategory").equalTo("Painter");
 
 
-
-        recyclerViewServices= findViewById(R.id.recycler_Painters);
+        recyclerViewServices = findViewById(R.id.recycler_Painters);
 
 
         linearLayoutManager = new LinearLayoutManager(this);
@@ -182,9 +180,7 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
         ReadPainters();
 
 
-
     }
-
 
 
     @Override
@@ -201,20 +197,19 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
     }
 
 
-
-    public void ReadPainters(){
+    public void ReadPainters() {
 
 
         progressDialog.show();
 
 
-        databasePainters.orderByChild("serviceCategory").equalTo("Painter").addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 allPaintersList.clear();
                 progressDialog.dismiss();
 
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     UserService userService = snapshot.getValue(UserService.class);
                     allPaintersList.add(userService);
@@ -223,24 +218,41 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
                 // ServiceAdapter serviceAdapter = new ServiceAdapter(PainterActivity.this,allPaintersList);
 
 
-
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermission();
+                    return;
+                }
                 client.getLastLocation().addOnSuccessListener(PainterActivity.this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
 
+                        //The app was crashing if GPS wasn't turned on, so here's a neat little fix
+
+                        if (location != null) {
+
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
 
 
-                        double latitude = location.getLatitude();
-                        double   longitude = location.getLongitude();
-
-                        Log.e("Start Latitude",String.valueOf(latitude));
-                        Log.e("Start Longitude",String.valueOf(longitude));
+                            Log.e("Start Latitude", String.valueOf(latitude));
+                            Log.e("Start Longitude", String.valueOf(longitude));
 
 
-                      CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this,allPaintersList,latitude,longitude);
 
-                      recyclerViewServices.setAdapter(serviceAdapter);
 
+
+                            CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this, allPaintersList, latitude, longitude);
+
+                            recyclerViewServices.setAdapter(serviceAdapter);
+
+
+                        }
+                        else{
+                            finish();
+                            Toast.makeText(getApplicationContext(),"Turn on your GPS", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                        }
 
 
                     }
@@ -342,6 +354,8 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
 
         ActivityCompat.requestPermissions(this, new String[] {ACCESS_FINE_LOCATION},1);
     }
+
+
 
 
 

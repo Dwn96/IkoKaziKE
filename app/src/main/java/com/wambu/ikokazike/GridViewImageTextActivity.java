@@ -57,6 +57,10 @@ public class GridViewImageTextActivity extends Activity   {
         requestPermission();
 
 
+
+        //consider removing all this below, lat lng can be assigned at individual service activities
+
+
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);  //change back to private variable in exception occurs
 
             client.getLastLocation().addOnSuccessListener(GridViewImageTextActivity.this, new OnSuccessListener<Location>() {
