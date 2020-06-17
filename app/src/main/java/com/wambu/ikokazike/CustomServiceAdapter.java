@@ -193,7 +193,7 @@ public class CustomServiceAdapter extends RecyclerView.Adapter<CustomServiceAdap
 
         Toolbar toolbarViewService = dialog.findViewById(R.id.toolbarViewService);
 
-        toolbarViewService.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbarViewService.setNavigationIcon(R.drawable.ic_baseline_close_24);
         toolbarViewService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

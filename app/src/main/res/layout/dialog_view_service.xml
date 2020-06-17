@@ -41,6 +41,7 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hint_color"
             android:textSize="15sp"
+            android:drawableStart="@drawable/ic_baseline_person_17"
 
             />
 
@@ -50,10 +51,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="#9C27B0"
+            android:textStyle="bold"
             android:textColorHint="@color/hint_color"
             android:textSize="15sp"
-
+            android:drawableStart="@drawable/ic_baseline_local_phone_17"
+            android:autoLink="phone"
 
             />
 
@@ -75,6 +78,7 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hint_color"
             android:textSize="15sp"
+            android:drawableLeft="@drawable/ic_baseline_attach_money_24"
 
             />
 
