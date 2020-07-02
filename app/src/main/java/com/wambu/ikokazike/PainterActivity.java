@@ -162,7 +162,7 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
 
         //String userId= Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
-        String userId = firebaseAuth.getCurrentUser().getUid();
+//        String userId = firebaseAuth.getCurrentUser().getUid();
 
 
         //databasePainters = FirebaseDatabase.getInstance().getReference("SERVICE");
