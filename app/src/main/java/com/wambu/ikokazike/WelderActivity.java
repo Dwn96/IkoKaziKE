@@ -2,6 +2,7 @@ package com.wambu.ikokazike;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,9 +20,12 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -55,6 +60,7 @@ public class WelderActivity extends Activity implements LocationCalcInterface {
     RecyclerView recyclerViewServices;
     Toolbar toolbarPainters;
     Query query;
+    AppCompatImageButton imageButton;
 
     Location mLocation;
 
@@ -71,6 +77,56 @@ public class WelderActivity extends Activity implements LocationCalcInterface {
         setContentView(R.layout.activity_welder);
 
         client = LocationServices.getFusedLocationProviderClient(this);
+
+        imageButton = findViewById(R.id.filter);
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Dialog dialog = new Dialog(WelderActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_filter);
+                dialog.show();
+
+                Button saveFilter = dialog.findViewById(R.id.button_save_Filter);
+
+                Toolbar toolbarFilter  =  dialog.findViewById(R.id.toolbarFilter);
+                toolbarFilter.setNavigationIcon(R.drawable.ic_baseline_close_24);
+
+                toolbarFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+
+                saveFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+
+                        /*
+                         * Fake it till you make it lmao. This is supposed to "simulate" a requery
+                         * after "geofence" has been setup
+                         *
+                         * */
+
+                        progressDialog.setMessage("Working.");
+                        progressDialog.show();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                progressDialog.dismiss();
+
+                            }
+                        }, 2000);
+
+                    }
+                });
+            }
+        });
+
 
 
         requestPermission();

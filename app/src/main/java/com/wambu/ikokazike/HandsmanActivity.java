@@ -2,6 +2,10 @@ package com.wambu.ikokazike;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+
+import androidx.appcompat.widget.AppCompatImageButton;
+
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,9 +23,15 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -53,8 +64,10 @@ public class HandsmanActivity extends Activity implements LocationCalcInterface 
     FirebaseAuth firebaseAuth;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerViewServices;
-    Toolbar toolbarPainters;
+    Toolbar toolbarHandsmen;
     Query query;
+    AppCompatImageButton imageButton;
+    RatingBar ratingBar;
 
     Location mLocation;
 
@@ -75,82 +88,72 @@ public class HandsmanActivity extends Activity implements LocationCalcInterface 
 
         requestPermission();
 
-/*
-        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);  //change back to private variable in exception occurs
 
-        client.getLastLocation().addOnSuccessListener(PainterActivity.this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-
-                if(location != null){
-
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-
-                    Log.d("Latitude",String.valueOf(latitude));
-                    Log.d("Longitude",String.valueOf(longitude));
-
-
-
-                }
-
-            }
-        });
-
-
- */
-
-/*
-        client.getLastLocation().addOnSuccessListener(PainterActivity.this, new OnSuccessListener<Location>() {   //this is what i commented out last, revert if crash
-            @Override
-            public void onSuccess(Location location) {
-
-
-
-                double latitude = location.getLatitude();
-                double   longitude = location.getLongitude();
-
-                    Log.e("Start Latitude",String.valueOf(latitude));
-                    Log.e("Start Longitude",String.valueOf(longitude));
-
-
-                    //  CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this,allPaintersList,latitude,longitude);
-
-                    //    recyclerViewServices.setAdapter(serviceAdapter);
-
-
-
-            }
-
-        });
-
-
-*/
-
-/*
-        location= new SimpleLocation(this);
-
-        if (!location.hasLocationEnabled()) {
-            // ask the user to enable location access
-            SimpleLocation.openSettings(this);
-        }
-
-
-        final double startLatitude = location.getLatitude();
-        final double startLongitude = location.getLongitude();
-
-
- */
 
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        toolbarPainters = findViewById(R.id.toolbarHandsman);
-        toolbarPainters.setTitle("Handymen");
-        toolbarPainters.setTitleTextColor(Color.BLACK);
-        toolbarPainters.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbarHandsmen = findViewById(R.id.toolbarHandsman);
+        toolbarHandsmen.setTitle("Handymen");
+        toolbarHandsmen.setTitleTextColor(Color.BLACK);
+        toolbarHandsmen.setNavigationIcon(R.drawable.ic_arrow_back);
 
-        toolbarPainters.setOnClickListener(new View.OnClickListener() {
+        imageButton = findViewById(R.id.filter);
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Dialog dialog = new Dialog(HandsmanActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_filter);
+                dialog.show();
+
+                Button saveFilter = dialog.findViewById(R.id.button_save_Filter);
+
+                Toolbar toolbarFilter  =  dialog.findViewById(R.id.toolbarFilter);
+                toolbarFilter.setNavigationIcon(R.drawable.ic_baseline_close_24);
+
+                toolbarFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+
+                saveFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+
+                        /*
+                         * Fake it till you make it lmao. This is supposed to "simulate" a requery
+                         * after "geofence" has been setup
+                         *
+                         * */
+
+                        progressDialog.setMessage("Working.");
+                        progressDialog.show();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                progressDialog.dismiss();
+
+                            }
+                        }, 2000);
+
+                    }
+                });
+            }
+        });
+
+
+
+
+
+
+
+        toolbarHandsmen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -177,11 +180,20 @@ public class HandsmanActivity extends Activity implements LocationCalcInterface 
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewServices.setLayoutManager(linearLayoutManager);
 
+
         ReadPainters();
 
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+
+
+        return true;
+    }
 
     @Override
     protected void onResume() {

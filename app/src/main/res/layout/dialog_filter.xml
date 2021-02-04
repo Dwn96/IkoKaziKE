@@ -58,14 +58,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 Km"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:text="20 Km" />
 
 
             <com.google.android.material.slider.Slider
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:valueFrom="0.0"
+                android:valueFrom="20.0"
                 android:valueTo="200.0"
                 android:stepSize="20.0"
 

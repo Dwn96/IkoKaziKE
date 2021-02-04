@@ -2,6 +2,10 @@ package com.wambu.ikokazike;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+
+import androidx.appcompat.widget.AppCompatImageButton;
+
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,9 +23,15 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -55,6 +66,8 @@ public class ElectricianActivity extends Activity implements LocationCalcInterfa
     RecyclerView recyclerViewServices;
     Toolbar toolbarPainters;
     Query query;
+    AppCompatImageButton imageButton;
+    RatingBar ratingBar;
 
     Location mLocation;
 
@@ -68,7 +81,7 @@ public class ElectricianActivity extends Activity implements LocationCalcInterfa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plumber);
+        setContentView(R.layout.activity_electrician);
 
         client = LocationServices.getFusedLocationProviderClient(this);
 
@@ -81,9 +94,64 @@ public class ElectricianActivity extends Activity implements LocationCalcInterfa
         firebaseAuth = FirebaseAuth.getInstance();
 
         toolbarPainters = findViewById(R.id.toolbarElectrician);
-        toolbarPainters.setTitle("Electrician");
+        toolbarPainters.setTitle("Electricians");
         toolbarPainters.setTitleTextColor(Color.BLACK);
         toolbarPainters.setNavigationIcon(R.drawable.ic_arrow_back);
+
+        imageButton = findViewById(R.id.filter);
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Dialog dialog = new Dialog(ElectricianActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_filter);
+                dialog.show();
+
+                Button saveFilter = dialog.findViewById(R.id.button_save_Filter);
+
+                Toolbar toolbarFilter  =  dialog.findViewById(R.id.toolbarFilter);
+                toolbarFilter.setNavigationIcon(R.drawable.ic_baseline_close_24);
+
+                toolbarFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+
+                saveFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+
+                        /*
+                         * Fake it till you make it lmao. This is supposed to "simulate" a requery
+                         * after "geofence" has been setup
+                         *
+                         * */
+
+                        progressDialog.setMessage("Working.");
+                        progressDialog.show();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                progressDialog.dismiss();
+
+                            }
+                        }, 2000);
+
+                    }
+                });
+            }
+        });
+
+
+
+
+
+
 
         toolbarPainters.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,8 +162,6 @@ public class ElectricianActivity extends Activity implements LocationCalcInterfa
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Working");
-        progressDialog.show();
-
 
         //String userId= Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
@@ -108,114 +174,26 @@ public class ElectricianActivity extends Activity implements LocationCalcInterfa
         query = databasePainters.orderByChild("serviceCategory").equalTo("Electrician");
 
 
-
         recyclerViewServices = findViewById(R.id.recycler_Electrician);
 
 
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewServices.setLayoutManager(linearLayoutManager);
 
-        //ReadPainters();
 
-        query.addListenerForSingleValueEvent(valueEventListener);
+        ReadPainters();
 
 
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
 
 
-
-
-
-    ValueEventListener valueEventListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-            allPaintersList.clear();
-            progressDialog.dismiss();
-
-            if(dataSnapshot.exists()) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                    UserService userService = snapshot.getValue(UserService.class);
-                    allPaintersList.add(userService);
-                    Log.e("Size of list", String.valueOf(allPaintersList.size()));
-                }
-
-            }
-
-            progressDialog.dismiss();
-            // ServiceAdapter serviceAdapter = new ServiceAdapter(PainterActivity.this,allPaintersList);
-
-
-            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermission();
-                return;
-            }
-            client.getLastLocation().addOnSuccessListener(ElectricianActivity.this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-
-                    //The app was crashing if GPS wasn't turned on, so here's a neat little fix
-
-                    if (location != null) {
-
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-
-
-                        Log.e("Start Latitude", String.valueOf(latitude));
-                        Log.e("Start Longitude", String.valueOf(longitude));
-
-
-
-
-
-                        CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(ElectricianActivity.this, allPaintersList, latitude, longitude);
-
-                        recyclerViewServices.setAdapter(serviceAdapter);
-
-
-                    }
-                    else{
-                        finish();
-                        Toast.makeText(getApplicationContext(),"Turn on your GPS", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-
-                    }
-
-
-                }
-
-            });
-
-
-
-
-
-            //   Log.e("Lat out successListener",String.valueOf(latitude));
-            //    Log.e("Lgn out successListener",String.valueOf(longitude));
-
-
-
-
-            //  CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this,allPaintersList,latitude,longitude);
-            //   recyclerViewServices.setAdapter(serviceAdapter);
-
-
-
-
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-            Log.d("ActivityFirebase","onCancelled",databaseError.toException());
-        }
-    };
-
-
-
+        return true;
+    }
 
     @Override
     protected void onResume() {
@@ -234,7 +212,94 @@ public class ElectricianActivity extends Activity implements LocationCalcInterfa
     public void ReadPainters() {
 
 
+        progressDialog.show();
 
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                allPaintersList.clear();
+                progressDialog.dismiss();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    UserService userService = snapshot.getValue(UserService.class);
+                    allPaintersList.add(userService);
+                }
+                progressDialog.dismiss();
+                // ServiceAdapter serviceAdapter = new ServiceAdapter(PainterActivity.this,allPaintersList);
+
+
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermission();
+                    return;
+                }
+                client.getLastLocation().addOnSuccessListener(ElectricianActivity.this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+
+                        //The app was crashing if GPS wasn't turned on, so here's a neat little fix
+
+                        if (location != null) {
+
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
+
+
+                            Log.e("Start Latitude", String.valueOf(latitude));
+                            Log.e("Start Longitude", String.valueOf(longitude));
+
+
+
+
+
+                            CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(ElectricianActivity.this, allPaintersList, latitude, longitude);
+
+                            recyclerViewServices.setAdapter(serviceAdapter);
+
+
+                        }
+                        else{
+                            finish();
+                            Toast.makeText(getApplicationContext(),"Turn on your GPS", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                        }
+
+
+                    }
+
+                });
+
+
+
+
+
+                //   Log.e("Lat out successListener",String.valueOf(latitude));
+                //    Log.e("Lgn out successListener",String.valueOf(longitude));
+
+
+
+
+                //  CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this,allPaintersList,latitude,longitude);
+                //   recyclerViewServices.setAdapter(serviceAdapter);
+
+
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                Log.d("PainterActivityFirebase","onCancelled",databaseError.toException());
+
+            }
+        });
+
+
+        /*
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -245,11 +310,11 @@ public class ElectricianActivity extends Activity implements LocationCalcInterfa
 
                     UserService userService = snapshot.getValue(UserService.class);
                     allPaintersList.add(userService);
-                }
+                    }
                 progressDialog.dismiss();
-                // ServiceAdapter serviceAdapter = new ServiceAdapter(PainterActivity.this,allPaintersList);
+               // ServiceAdapter serviceAdapter = new ServiceAdapter(PainterActivity.this,allPaintersList);
 
-                CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(ElectricianActivity.this,allPaintersList);
+                CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this,allPaintersList);
 
                 recyclerViewServices.setAdapter(serviceAdapter);
 
@@ -263,7 +328,7 @@ public class ElectricianActivity extends Activity implements LocationCalcInterfa
 
 
 
-
+         */
 
 
 

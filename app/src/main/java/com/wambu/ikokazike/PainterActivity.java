@@ -180,13 +180,6 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewServices.setLayoutManager(linearLayoutManager);
 
-        ratingBar = findViewById(R.id.ratingBar);
-        ratingBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String rating=String.valueOf(ratingBar.getRating());
-            }
-        });
 
         ReadPainters();
 

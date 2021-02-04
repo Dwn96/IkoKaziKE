@@ -13,9 +13,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/toolbarHandsman"
         android:background="#ECB511"
-
-
         />
+
+
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:layout_width="71dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="#ECB511"
+        android:id="@+id/filter"
+        android:src="@drawable/filter" />
 
 
 

@@ -140,6 +140,7 @@ public class GridViewImageTextActivity extends Activity   {
                         Toast.makeText(getApplicationContext(),"Showing you electricians in your area...",Toast.LENGTH_SHORT).show();
                         Intent toElecIntent = new Intent(getApplicationContext(),ElectricianActivity.class);
                         startActivity(toElecIntent);
+                        break;
 
                     case 3:
                         Toast.makeText(getApplicationContext(),"Showing you handymen in your area...",Toast.LENGTH_SHORT).show();
