@@ -35,7 +35,7 @@ public class GridViewImageTextActivity extends Activity   {
 
     GridView androidGridView;
 
-    String[] gridViewString = {"Painters", "Plumbers", "Electricians", "Handsmen", "Welder", "New Listing"};
+    String[] gridViewString = {"Painters", "Plumbers", "Electricians", "Handymen", "Welders", "New Listing"};
 
     int[] gridViewImageId = {R.drawable.brush, R.drawable.pipe, R.drawable.electricity, R.drawable.hand, R.drawable.welder, R.drawable.plus};
 
@@ -132,18 +132,25 @@ public class GridViewImageTextActivity extends Activity   {
 
                     case 1:
                         Toast.makeText(getApplicationContext(),"Showing you plumbers in your area...",Toast.LENGTH_SHORT).show();
+                        Intent toPlumberIntent = new Intent(getApplicationContext(),PlumberActivity.class);
+                        startActivity(toPlumberIntent);
                         break;
 
                     case 2:
                         Toast.makeText(getApplicationContext(),"Showing you electricians in your area...",Toast.LENGTH_SHORT).show();
-                        break;
+                        Intent toElecIntent = new Intent(getApplicationContext(),ElectricianActivity.class);
+                        startActivity(toElecIntent);
 
                     case 3:
-                        Toast.makeText(getApplicationContext(),"Showing you handsmen in your area...",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Showing you handymen in your area...",Toast.LENGTH_SHORT).show();
+                        Intent toHandIntent = new Intent(getApplicationContext(),HandsmanActivity.class);
+                        startActivity(toHandIntent);
                         break;
 
                     case 4:
                         Toast.makeText(getApplicationContext(),"Showing you welders in your area...",Toast.LENGTH_SHORT).show();
+                        Intent toWelderIntent = new Intent(getApplicationContext(),WelderActivity.class);
+                        startActivity(toWelderIntent);
                         break;
 
                     case 5:

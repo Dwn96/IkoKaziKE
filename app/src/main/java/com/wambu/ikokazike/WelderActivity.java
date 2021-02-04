@@ -2,10 +2,6 @@ package com.wambu.ikokazike;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-
-import androidx.appcompat.widget.AppCompatImageButton;
-
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,15 +18,9 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.RatingBar;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -56,7 +45,7 @@ import java.util.Objects;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 
-public class PainterActivity extends Activity implements LocationCalcInterface {
+public class WelderActivity extends Activity implements LocationCalcInterface {
 
     ArrayList<UserService> allPaintersList = new ArrayList<>();
     ProgressDialog progressDialog;
@@ -66,8 +55,6 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
     RecyclerView recyclerViewServices;
     Toolbar toolbarPainters;
     Query query;
-    AppCompatImageButton imageButton;
-    RatingBar ratingBar;
 
     Location mLocation;
 
@@ -81,77 +68,87 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_painter);
+        setContentView(R.layout.activity_welder);
 
         client = LocationServices.getFusedLocationProviderClient(this);
 
 
         requestPermission();
 
+/*
+        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);  //change back to private variable in exception occurs
 
-
-
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        toolbarPainters = findViewById(R.id.toolbarPainters);
-        toolbarPainters.setTitle("Painters");
-        toolbarPainters.setTitleTextColor(Color.BLACK);
-        toolbarPainters.setNavigationIcon(R.drawable.ic_arrow_back);
-
-        imageButton = findViewById(R.id.filter);
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        client.getLastLocation().addOnSuccessListener(PainterActivity.this, new OnSuccessListener<Location>() {
             @Override
-            public void onClick(View v) {
+            public void onSuccess(Location location) {
 
-                final Dialog dialog = new Dialog(PainterActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_filter);
-                dialog.show();
+                if(location != null){
 
-                Button saveFilter = dialog.findViewById(R.id.button_save_Filter);
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
 
-                Toolbar toolbarFilter  =  dialog.findViewById(R.id.toolbarFilter);
-                toolbarFilter.setNavigationIcon(R.drawable.ic_baseline_close_24);
+                    Log.d("Latitude",String.valueOf(latitude));
+                    Log.d("Longitude",String.valueOf(longitude));
 
-                toolbarFilter.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
 
-                saveFilter.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
 
-                        /*
-                        * Fake it till you make it lmao. This is supposed to "simulate" a requery
-                        * after "geofence" has been setup
-                        *
-                        * */
+                }
 
-                        progressDialog.setMessage("Working.");
-                        progressDialog.show();
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                progressDialog.dismiss();
-
-                            }
-                        }, 2000);
-
-                    }
-                });
             }
         });
 
 
+ */
+
+/*
+        client.getLastLocation().addOnSuccessListener(PainterActivity.this, new OnSuccessListener<Location>() {   //this is what i commented out last, revert if crash
+            @Override
+            public void onSuccess(Location location) {
 
 
 
+                double latitude = location.getLatitude();
+                double   longitude = location.getLongitude();
 
+                    Log.e("Start Latitude",String.valueOf(latitude));
+                    Log.e("Start Longitude",String.valueOf(longitude));
+
+
+                    //  CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this,allPaintersList,latitude,longitude);
+
+                    //    recyclerViewServices.setAdapter(serviceAdapter);
+
+
+
+            }
+
+        });
+
+
+*/
+
+/*
+        location= new SimpleLocation(this);
+
+        if (!location.hasLocationEnabled()) {
+            // ask the user to enable location access
+            SimpleLocation.openSettings(this);
+        }
+
+
+        final double startLatitude = location.getLatitude();
+        final double startLongitude = location.getLongitude();
+
+
+ */
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        toolbarPainters = findViewById(R.id.toolbarWelder);
+        toolbarPainters.setTitle("Welders");
+        toolbarPainters.setTitleTextColor(Color.BLACK);
+        toolbarPainters.setNavigationIcon(R.drawable.ic_arrow_back);
 
         toolbarPainters.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,36 +168,20 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
         //databasePainters = FirebaseDatabase.getInstance().getReference("SERVICE");
 
         databasePainters = FirebaseDatabase.getInstance().getReference("SERVICE");  //used to be .child(userID)
-        query = databasePainters.orderByChild("serviceCategory").equalTo("Painter");
+        query = databasePainters.orderByChild("serviceCategory").equalTo("Welder");
 
 
-        recyclerViewServices = findViewById(R.id.recycler_Painters);
+        recyclerViewServices = findViewById(R.id.recycler_Welder);
 
 
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewServices.setLayoutManager(linearLayoutManager);
-
-        ratingBar = findViewById(R.id.ratingBar);
-        ratingBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String rating=String.valueOf(ratingBar.getRating());
-            }
-        });
 
         ReadPainters();
 
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-
-
-        return true;
-    }
 
     @Override
     protected void onResume() {
@@ -241,7 +222,7 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
                     requestPermission();
                     return;
                 }
-                client.getLastLocation().addOnSuccessListener(PainterActivity.this, new OnSuccessListener<Location>() {
+                client.getLastLocation().addOnSuccessListener(WelderActivity.this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
 
@@ -260,7 +241,7 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
 
 
 
-                            CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this, allPaintersList, latitude, longitude);
+                            CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(WelderActivity.this, allPaintersList, latitude, longitude);
 
                             recyclerViewServices.setAdapter(serviceAdapter);
 
@@ -282,14 +263,14 @@ public class PainterActivity extends Activity implements LocationCalcInterface {
 
 
 
-             //   Log.e("Lat out successListener",String.valueOf(latitude));
-            //    Log.e("Lgn out successListener",String.valueOf(longitude));
+                //   Log.e("Lat out successListener",String.valueOf(latitude));
+                //    Log.e("Lgn out successListener",String.valueOf(longitude));
 
 
 
 
-              //  CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this,allPaintersList,latitude,longitude);
-             //   recyclerViewServices.setAdapter(serviceAdapter);
+                //  CustomServiceAdapter serviceAdapter = new CustomServiceAdapter(PainterActivity.this,allPaintersList,latitude,longitude);
+                //   recyclerViewServices.setAdapter(serviceAdapter);
 
 
 

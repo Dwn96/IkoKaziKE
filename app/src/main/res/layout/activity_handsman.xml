@@ -8,33 +8,21 @@
     tools:context=".MyServicesActivity">
 
 
-
-
-
     <Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbarPainters"
+        android:id="@+id/toolbarHandsman"
         android:background="#ECB511"
 
 
         />
 
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:layout_width="71dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:background="#ECB511"
-        android:id="@+id/filter"
-        android:src="@drawable/filter" />
-
 
     <androidx.recyclerview.widget.RecyclerView
-        android:paddingTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycler_Painters">
+        android:id="@+id/recycler_Handsman">
 
     </androidx.recyclerview.widget.RecyclerView>
 

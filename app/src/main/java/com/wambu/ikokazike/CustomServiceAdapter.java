@@ -18,7 +18,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.wambu.ikokazike.Data.UserService;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class CustomServiceAdapter extends RecyclerView.Adapter<CustomServiceAdapter.CustomServiceHolder> {
@@ -71,10 +72,6 @@ public class CustomServiceAdapter extends RecyclerView.Adapter<CustomServiceAdap
 
         CustomServiceHolder serviceHolder = new CustomServiceHolder(view);
 
-
-
-
-
         return serviceHolder;
     }
 
@@ -91,8 +88,8 @@ public class CustomServiceAdapter extends RecyclerView.Adapter<CustomServiceAdap
 
        LatLng p1 = locationCalcInterface.getLocationFromAddress(context,location);
 
-       double endLatitude = p1.latitude;
-       double endLongitude=p1.longitude;
+       final double endLatitude = p1.latitude;
+       final double endLongitude=p1.longitude;
 
         Log.e("End latitude",String.valueOf(endLatitude) );
         Log.e("End longitude",String.valueOf(endLongitude) );
@@ -120,7 +117,7 @@ public class CustomServiceAdapter extends RecyclerView.Adapter<CustomServiceAdap
 
         Location.distanceBetween(startLat,startLong,endLatitude,endLongitude,results);
 
-      int  distanceInMeters = (int) results[0];
+      final int  distanceInMeters = (int) results[0];
 
       String distanceBetween= "" +distanceInMeters/1000+ " Km away";
 

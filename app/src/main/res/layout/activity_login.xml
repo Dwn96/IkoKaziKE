@@ -8,6 +8,20 @@
     android:orientation="vertical"
     android:gravity="center">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/kazikwote"
+        />
+
+    <TextView
+        android:id="@+id/tvSplash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="Kazi Kwote"
+        android:gravity="center"
+        android:textColor="#FFC107"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,11 +51,12 @@
             android:layout_marginBottom="20dp"/>
 
         <Button
-            android:paddingTop="25dp"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:text="Login"
+            android:backgroundTint="#ECB511"
             android:id="@+id/loginBtn"
 
             />

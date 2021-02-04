@@ -3,15 +3,18 @@ package com.wambu.ikokazike;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,7 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.wambu.ikokazike.Data.UserInfo;
 
 
-public class Registration extends AppCompatActivity {
+public class Registration extends Activity {
 
     private EditText editTextName,editTextEmail,editTextPassword;
     private Button btnRegister;
@@ -36,6 +39,7 @@ public class Registration extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     ProgressDialog progressDialog;
     DatabaseReference databaseUsers;
+    Toolbar toolbarSignup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,7 @@ public class Registration extends AppCompatActivity {
         editTextEmail=findViewById(R.id.editText_signup_email);
         editTextPassword=findViewById(R.id.editText_signup_password);
         btnRegister=findViewById(R.id.signupBtn);
+        toolbarSignup = findViewById(R.id.toolbarRegister);
 
 
         if(getIntent().hasExtra("MOBILE")){
@@ -65,7 +70,16 @@ public class Registration extends AppCompatActivity {
 
         }
 
+        toolbarSignup.setTitle("Sign Up");
+        toolbarSignup.setTitleTextColor(Color.BLACK);
+        toolbarSignup.setNavigationIcon(R.drawable.ic_arrow_back);
 
+        toolbarSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override

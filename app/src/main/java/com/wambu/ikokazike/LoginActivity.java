@@ -3,6 +3,7 @@ package com.wambu.ikokazike;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity {
     private TextView toSignUpTxt,forgotPasswordTv,OTPtextView;
     private Button btnLogin;
     private EditText editTextEmail,editTextPassword;
