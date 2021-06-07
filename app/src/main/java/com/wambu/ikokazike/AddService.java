@@ -81,7 +81,7 @@ public class AddService extends Activity  implements SpinnerPopulater {
         firebaseAuth= FirebaseAuth.getInstance();
 
         //Initialize Places
-        Places.initialize(getApplicationContext(),"AIzaSyDfod9sngt3b0l5KAFd50GB0MnN8xZja6Y");
+        Places.initialize(getApplicationContext(),"");
 
         //Set editText non focusable
         addLocation.setFocusable(false);
