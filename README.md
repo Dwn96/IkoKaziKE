@@ -4,7 +4,7 @@ Finally open source.
 
 
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/45044744/120978096-c92d6680-c77c-11eb-8b22-3d496cecbc12.png" height="400" />
+  <img src="https://user-images.githubusercontent.com/45044744/120978096-c92d6680-c77c-11eb-8b22-3d496cecbc12.png" height="500" />
 </p>
 
 <p float="left">  
