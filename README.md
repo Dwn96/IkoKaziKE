@@ -21,4 +21,3 @@ Finally open source.
   <img src="https://user-images.githubusercontent.com/45044744/120978311-0265d680-c77d-11eb-8072-5d7ccc953bd2.png" height="400" />
 </p>
 
-![a1d14817-17bf-4d42-aeaa-60629fae84c0]()
